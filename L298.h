@@ -1,4 +1,4 @@
-/* L298.h - L298 DC motor control
+/* L298.h - L298 DC Motor Control Library
  * 
  * Author: Márcio Pessoa <marcio.pessoa@sciemon.com>
  * Contributors: none

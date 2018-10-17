@@ -1,4 +1,4 @@
-/* L298.cpp - L298 DC motor control
+/* L298.cpp - L298 DC Motor Control Library
  * 
  */
 
