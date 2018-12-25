@@ -48,6 +48,8 @@ void L298::attach(byte in1_pin, byte in2_pin, byte in3_pin, byte in4_pin) {
   _in2_pin = in2_pin;
   _in3_pin = in3_pin;
   _in4_pin = in4_pin;
+  _straightA = true
+  _straightB = true
   stop();
 }
 
@@ -65,11 +67,8 @@ void L298::attach(byte in1_pin, byte in2_pin, byte in3_pin, byte in4_pin) {
  *   void
  */
 void L298::stop() {
-  // Direct
-  digitalWrite(_in1_pin, HIGH);
-  digitalWrite(_in2_pin, HIGH);
-  digitalWrite(_in3_pin, HIGH);
-  digitalWrite(_in4_pin, HIGH);
+  stopA();
+  stopB();
 }
 
 /* stopA
@@ -86,7 +85,6 @@ void L298::stop() {
  *   void
  */
 void L298::stopA() {
-  // Direct
   digitalWrite(_in1_pin, HIGH);
   digitalWrite(_in2_pin, HIGH);
 }
@@ -105,7 +103,6 @@ void L298::stopA() {
  *   void
  */
 void L298::stopB() {
-  // Direct
   digitalWrite(_in3_pin, HIGH);
   digitalWrite(_in4_pin, HIGH);
 }
@@ -124,12 +121,8 @@ void L298::stopB() {
  *   void
  */
 void L298::direct(byte speed) {
-  _speedA = (speed * 255) / 100;
-  _speedB = _speedA;
-  analogWrite(_in1_pin, _speedA);
-  analogWrite(_in2_pin, 0);
-  analogWrite(_in3_pin, _speedB);
-  analogWrite(_in4_pin, 0);
+  directA();
+  directB();
 }
 
 /* directA
@@ -184,12 +177,8 @@ void L298::directB(byte speed) {
  *   void
  */
 void L298::reverse(byte speed) {
-  _speedA = (speed * 255) / 100;
-  _speedB = _speedA;
-  analogWrite(_in1_pin, 0);
-  analogWrite(_in2_pin, _speedA);
-  analogWrite(_in3_pin, 0);
-  analogWrite(_in4_pin, _speedB);
+  reverseA();
+  reverseB();
 }
 
 /* reverseA
@@ -228,4 +217,38 @@ void L298::reverseB(byte speed) {
   _speedA = (speed * 255) / 100;
   analogWrite(_in3_pin, 0);
   analogWrite(_in4_pin, _speedA);
+}
+
+/* directionA
+ * 
+ * Description
+ *   Get motor A direction.
+ * 
+ *   motor.directionA()
+ * 
+ * Parameters
+ *   none
+ * 
+ * Returns
+ *   bool
+ */
+bool L298::directionA() {
+  return _straightA;
+}
+
+/* directionB
+ * 
+ * Description
+ *   Get motor B direction.
+ * 
+ *   motor.directionB()
+ * 
+ * Parameters
+ *   none
+ * 
+ * Returns
+ *   bool
+ */
+boll L298::directionB() {
+  return _straightB;
 }

@@ -28,6 +28,8 @@ class L298
     void reverse(byte speed=100);
     void reverseA(byte speed=100);
     void reverseB(byte speed=100);
+    bool directionA();
+    bool directionB();
   private:
     byte _in1_pin;
     byte _in2_pin;
@@ -35,6 +37,8 @@ class L298
     byte _in4_pin;
     byte _speedA;
     byte _speedB;
+    bool _straightA;
+    bool _straightB;
 };
 
 #endif
