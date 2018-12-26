@@ -4,6 +4,13 @@
  * Contributors: none
  * 
  * Change log
+ * 2018-12-25
+ *         Fixed: direct() and reverse() methods wasn't receiveing params.
+ *         Added: getSpeedA() and getSpeedB() methods.
+ *
+ * 2018-12-24
+ *         Added: getDirectionA() and getDirectionB() methods.
+ *
  * 2017-11-04
  *         Experimental version.
  */
@@ -28,8 +35,10 @@ class L298
     void reverse(byte speed=100);
     void reverseA(byte speed=100);
     void reverseB(byte speed=100);
-    bool directionA();
-    bool directionB();
+    bool getDirectionA();
+    bool getDirectionB();
+    byte getSpeedA();
+    byte getSpeedB();
   private:
     byte _in1_pin;
     byte _in2_pin;

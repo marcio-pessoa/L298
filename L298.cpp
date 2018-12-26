@@ -48,8 +48,8 @@ void L298::attach(byte in1_pin, byte in2_pin, byte in3_pin, byte in4_pin) {
   _in2_pin = in2_pin;
   _in3_pin = in3_pin;
   _in4_pin = in4_pin;
-  _straightA = true
-  _straightB = true
+  _straightA = true;
+  _straightB = true;
   stop();
 }
 
@@ -85,6 +85,7 @@ void L298::stop() {
  *   void
  */
 void L298::stopA() {
+  _speedA = 0;
   digitalWrite(_in1_pin, HIGH);
   digitalWrite(_in2_pin, HIGH);
 }
@@ -103,6 +104,7 @@ void L298::stopA() {
  *   void
  */
 void L298::stopB() {
+  _speedB = 0;
   digitalWrite(_in3_pin, HIGH);
   digitalWrite(_in4_pin, HIGH);
 }
@@ -121,8 +123,8 @@ void L298::stopB() {
  *   void
  */
 void L298::direct(byte speed) {
-  directA();
-  directB();
+  directA(speed);
+  directB(speed);
 }
 
 /* directA
@@ -139,6 +141,7 @@ void L298::direct(byte speed) {
  *   void
  */
 void L298::directA(byte speed) {
+  _straightA = true;
   _speedA = (speed * 255) / 100;
   analogWrite(_in1_pin, _speedA);
   analogWrite(_in2_pin, 0);
@@ -158,6 +161,7 @@ void L298::directA(byte speed) {
  *   void
  */
 void L298::directB(byte speed) {
+  _straightB = true;
   _speedB = (speed * 255) / 100;
   analogWrite(_in3_pin, _speedB);
   analogWrite(_in4_pin, 0);
@@ -177,8 +181,8 @@ void L298::directB(byte speed) {
  *   void
  */
 void L298::reverse(byte speed) {
-  reverseA();
-  reverseB();
+  reverseA(speed);
+  reverseB(speed);
 }
 
 /* reverseA
@@ -195,6 +199,7 @@ void L298::reverse(byte speed) {
  *   void
  */
 void L298::reverseA(byte speed) {
+  _straightA = false;
   _speedA = (speed * 255) / 100;
   analogWrite(_in1_pin, 0);
   analogWrite(_in2_pin, _speedA);
@@ -214,17 +219,18 @@ void L298::reverseA(byte speed) {
  *   void
  */
 void L298::reverseB(byte speed) {
+  _straightB = false;
   _speedA = (speed * 255) / 100;
   analogWrite(_in3_pin, 0);
   analogWrite(_in4_pin, _speedA);
 }
 
-/* directionA
+/* getDirectionA
  * 
  * Description
  *   Get motor A direction.
  * 
- *   motor.directionA()
+ *   motor.getDirectionA()
  * 
  * Parameters
  *   none
@@ -232,16 +238,16 @@ void L298::reverseB(byte speed) {
  * Returns
  *   bool
  */
-bool L298::directionA() {
+bool L298::getDirectionA() {
   return _straightA;
 }
 
-/* directionB
+/* getDirectionB
  * 
  * Description
  *   Get motor B direction.
  * 
- *   motor.directionB()
+ *   motor.getDirectionB()
  * 
  * Parameters
  *   none
@@ -249,6 +255,40 @@ bool L298::directionA() {
  * Returns
  *   bool
  */
-boll L298::directionB() {
+bool L298::getDirectionB() {
   return _straightB;
+}
+
+/* getSpeedA
+ * 
+ * Description
+ *   Get motor B direction.
+ * 
+ *   motor.getSpeedA()
+ * 
+ * Parameters
+ *   none
+ * 
+ * Returns
+ *   byte
+ */
+byte L298::getSpeedA() {
+  return _speedA;
+}
+
+/* getSpeedB
+ * 
+ * Description
+ *   Get motor B direction.
+ * 
+ *   motor.getSpeedB()
+ * 
+ * Parameters
+ *   none
+ * 
+ * Returns
+ *   byte
+ */
+byte L298::getSpeedB() {
+  return _speedB;
 }
