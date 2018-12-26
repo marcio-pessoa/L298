@@ -1,1 +1,1 @@
-# Arduino L298 DC Motor Control Library
+# L298 Dual Full-Bridge Driver Control Library
