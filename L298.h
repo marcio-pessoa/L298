@@ -1,12 +1,14 @@
-/* L298.h - L298 DC Motor Control Library
+/* L298.h - L298 Dual Full-Bridge Driver Control Library
  * 
  * Author: Márcio Pessoa <marcio.pessoa@gmail.com>
  * Contributors: none
  * 
  * Change log
+ * 2018-12-26
+ *         Added: setDeltaA() and setDeltaB() methods.
+ *
  * 2018-12-25
- *         Fixed: direct() and reverse() methods wasn't receiveing params.
- *         Added: getSpeedA() and getSpeedB() methods.
+ *         Added: getDeltaA() and getDeltaB() methods.
  *
  * 2018-12-24
  *         Added: getDirectionA() and getDirectionB() methods.
@@ -26,28 +28,31 @@ class L298
     L298();
     void attach(byte in1_pin, byte in2_pin,
                 byte in3_pin=false, byte in4_pin=false);
-    void stop();
     void stopA();
     void stopB();
-    void direct(byte speed=100);
-    void directA(byte speed=100);
-    void directB(byte speed=100);
-    void reverse(byte speed=100);
-    void reverseA(byte speed=100);
-    void reverseB(byte speed=100);
+    void directA(byte speed=255);
+    void directB(byte speed=255);
+    void reverseA(byte speed=255);
+    void reverseB(byte speed=255);
+    void setDeltaA(byte speed);
+    void setDeltaB(byte speed);
+    byte getDeltaA();
+    byte getDeltaB();
     bool getDirectionA();
     bool getDirectionB();
-    byte getSpeedA();
-    byte getSpeedB();
   private:
+    void update();
     byte _in1_pin;
     byte _in2_pin;
     byte _in3_pin;
     byte _in4_pin;
-    byte _speedA;
-    byte _speedB;
-    bool _straightA;
-    bool _straightB;
+    byte _a1;
+    byte _a2;
+    byte _b1;
+    byte _b2;
 };
+
+byte delta(byte x, byte y);
+byte direction(byte x, byte y);
 
 #endif

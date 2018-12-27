@@ -1,4 +1,4 @@
-/* L298.cpp - L298 DC Motor Control Library
+/* L298.cpp - L298 Dual Full-Bridge Driver Control Library
  * 
  */
 
@@ -8,7 +8,7 @@
 /* L298
  * 
  * Description
- *   L298 DC motor control.
+ *   L298 Dual Full-Bridge Driver Control.
  * 
  *   L298 ()
  * 
@@ -19,12 +19,16 @@
  *   void
  */
 L298::L298() {
+  _a1 = 0;
+  _a2 = 0;
+  _b1 = 0;
+  _b2 = 0;
 }
 
 /* attach
  * 
  * Description
- *   Attach motor.
+ *   Attach pins.
  * 
  *   motor.attach(byte in1_pin, byte in2_pin, byte in3_pin, byte in4_pin)
  * 
@@ -42,23 +46,19 @@ void L298::attach(byte in1_pin, byte in2_pin, byte in3_pin, byte in4_pin) {
   pinMode(in2_pin, OUTPUT);
   pinMode(in3_pin, OUTPUT);
   pinMode(in4_pin, OUTPUT);
-  _speedA = 100;  // Percent
-  _speedB = 100;  // Percent
   _in1_pin = in1_pin;
   _in2_pin = in2_pin;
   _in3_pin = in3_pin;
   _in4_pin = in4_pin;
-  _straightA = true;
-  _straightB = true;
-  stop();
+  update();
 }
 
-/* stop
+/* update
  * 
  * Description
- *   Stop motors.
+ *   Update driver Output.
  * 
- *   motor.stop()
+ *   motor.update()
  * 
  * Parameters
  *   none
@@ -66,15 +66,17 @@ void L298::attach(byte in1_pin, byte in2_pin, byte in3_pin, byte in4_pin) {
  * Returns
  *   void
  */
-void L298::stop() {
-  stopA();
-  stopB();
+void L298::update() {
+  digitalWrite(_in1_pin, _a1);
+  digitalWrite(_in2_pin, _a2);
+  digitalWrite(_in3_pin, _b1);
+  digitalWrite(_in4_pin, _b2);
 }
 
 /* stopA
  * 
  * Description
- *   Stop motor A.
+ *   Stop Output A.
  * 
  *   motor.stopA()
  * 
@@ -85,15 +87,15 @@ void L298::stop() {
  *   void
  */
 void L298::stopA() {
-  _speedA = 0;
-  digitalWrite(_in1_pin, HIGH);
-  digitalWrite(_in2_pin, HIGH);
+  _a1 = 0;
+  _a2 = 0;
+  update();
 }
 
 /* stopB
  * 
  * Description
- *   Stop motor B.
+ *   Stop Output B.
  * 
  *   motor.stopB()
  * 
@@ -104,33 +106,15 @@ void L298::stopA() {
  *   void
  */
 void L298::stopB() {
-  _speedB = 0;
-  digitalWrite(_in3_pin, HIGH);
-  digitalWrite(_in4_pin, HIGH);
-}
-
-/* direct
- * 
- * Description
- *   Start motors to run directly.
- * 
- *   motor.direct()
- * 
- * Parameters
- *   none
- * 
- * Returns
- *   void
- */
-void L298::direct(byte speed) {
-  directA(speed);
-  directB(speed);
+  _b1 = 0;
+  _b2 = 0;
+  update();
 }
 
 /* directA
  * 
  * Description
- *   Start motor A to run directly.
+ *   Start a Conventional electric current on Output A.
  * 
  *   motor.directA()
  * 
@@ -140,17 +124,16 @@ void L298::direct(byte speed) {
  * Returns
  *   void
  */
-void L298::directA(byte speed) {
-  _straightA = true;
-  _speedA = (speed * 255) / 100;
-  analogWrite(_in1_pin, _speedA);
-  analogWrite(_in2_pin, 0);
+void L298::directA(byte delta) {
+  _a1 = delta;
+  _a2 = 0;
+  update();
 }
 
 /* directB
  * 
  * Description
- *   Start motor B to run directly.
+ *   Start a Conventional electric current on Output B.
  * 
  *   motor.directB()
  * 
@@ -160,35 +143,16 @@ void L298::directA(byte speed) {
  * Returns
  *   void
  */
-void L298::directB(byte speed) {
-  _straightB = true;
-  _speedB = (speed * 255) / 100;
-  analogWrite(_in3_pin, _speedB);
-  analogWrite(_in4_pin, 0);
-}
-
-/* reverse
- * 
- * Description
- *   Start motors to run reversly.
- * 
- *   motor.reverse()
- * 
- * Parameters
- *   none
- * 
- * Returns
- *   void
- */
-void L298::reverse(byte speed) {
-  reverseA(speed);
-  reverseB(speed);
+void L298::directB(byte delta) {
+  _b1 = delta;
+  _b2 = 0;
+  update();
 }
 
 /* reverseA
  * 
  * Description
- *   Start motor A to run reversly.
+ *   Start a Real electric current on Output A.
  * 
  *   motor.reverseA()
  * 
@@ -198,17 +162,16 @@ void L298::reverse(byte speed) {
  * Returns
  *   void
  */
-void L298::reverseA(byte speed) {
-  _straightA = false;
-  _speedA = (speed * 255) / 100;
-  analogWrite(_in1_pin, 0);
-  analogWrite(_in2_pin, _speedA);
+void L298::reverseA(byte delta) {
+  _a1 = 0;
+  _a2 = delta;
+  update();
 }
 
 /* reverseB
  * 
  * Description
- *   Start motor B to run reversly.
+ *   Start a Real electric current on Output B.
  * 
  *   motor.reverseB()
  * 
@@ -218,17 +181,60 @@ void L298::reverseA(byte speed) {
  * Returns
  *   void
  */
-void L298::reverseB(byte speed) {
-  _straightB = false;
-  _speedA = (speed * 255) / 100;
-  analogWrite(_in3_pin, 0);
-  analogWrite(_in4_pin, _speedA);
+void L298::reverseB(byte delta) {
+  _b1 = 0;
+  _b2 = delta;
+  update();
+}
+
+/* speedA
+ * 
+ * Description
+ *   Set motor A speed.
+ * 
+ *   motor.speedA()
+ * 
+ * Parameters
+ *   none
+ * 
+ * Returns
+ *   void
+ */
+void L298::setDeltaA(byte delta) {
+  if (getDirectionA()) {
+    directA(delta);
+  }
+  else {
+    reverseA(delta);
+  }
+}
+
+/* speedB
+ * 
+ * Description
+ *   Set motor B speed.
+ * 
+ *   motor.speedB()
+ * 
+ * Parameters
+ *   none
+ * 
+ * Returns
+ *   void
+ */
+void L298::setDeltaB(byte delta) {
+  if (getDirectionB()) {
+    directB(delta);
+  }
+  else {
+    reverseB(delta);
+  }
 }
 
 /* getDirectionA
  * 
  * Description
- *   Get motor A direction.
+ *   Get Output A electric current direction.
  * 
  *   motor.getDirectionA()
  * 
@@ -236,16 +242,17 @@ void L298::reverseB(byte speed) {
  *   none
  * 
  * Returns
- *   bool
+ *   true: Conventional electric current flow
+ *   false: Real electric current flow
  */
 bool L298::getDirectionA() {
-  return _straightA;
+  return direction(_a1, _a2);
 }
 
 /* getDirectionB
  * 
  * Description
- *   Get motor B direction.
+ *   Get Output B electric current direction.
  * 
  *   motor.getDirectionB()
  * 
@@ -253,18 +260,19 @@ bool L298::getDirectionA() {
  *   none
  * 
  * Returns
- *   bool
+ *   true: Conventional electric current flow
+ *   false: Real electric current flow
  */
 bool L298::getDirectionB() {
-  return _straightB;
+  return direction(_b1, _b2);
 }
 
-/* getSpeedA
+/* getDeltaA
  * 
  * Description
- *   Get motor B direction.
+ *   Get delta in Output A.
  * 
- *   motor.getSpeedA()
+ *   motor.getDeltaA()
  * 
  * Parameters
  *   none
@@ -272,16 +280,16 @@ bool L298::getDirectionB() {
  * Returns
  *   byte
  */
-byte L298::getSpeedA() {
-  return _speedA;
+byte L298::getDeltaA() {
+  return delta(_a1, _a2);
 }
 
-/* getSpeedB
+/* getDeltaB
  * 
  * Description
- *   Get motor B direction.
+ *   Get delta in Output B.
  * 
- *   motor.getSpeedB()
+ *   motor.getDeltaB()
  * 
  * Parameters
  *   none
@@ -289,6 +297,52 @@ byte L298::getSpeedA() {
  * Returns
  *   byte
  */
-byte L298::getSpeedB() {
-  return _speedB;
+byte L298::getDeltaB() {
+  return delta(_b1, _b2);
+}
+
+/* delta
+ * 
+ * Description
+ *   Calculate delta.
+ * 
+ *   delta()
+ * 
+ * Parameters
+ *   x
+ *   y
+ * 
+ * Returns
+ *   byte
+ */
+byte delta(byte x, byte y) {
+  if (x > y) {
+    return x - y;
+  }
+  else {
+    return y - x;
+  }
+}
+
+/* direction
+ * 
+ * Description
+ *   Calculate direction.
+ * 
+ *   direction()
+ * 
+ * Parameters
+ *   x
+ *   y
+ * 
+ * Returns
+ *   byte
+ */
+byte direction(byte x, byte y) {
+  if (x > y) {
+    return true;
+  }
+  else {
+    return false;
+  }
 }
