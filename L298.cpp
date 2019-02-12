@@ -1,20 +1,20 @@
 /* L298.cpp - L298 Dual Full-Bridge Driver Control Library
- * 
+ *
  */
 
 #include "Arduino.h"
 #include "L298.h"
 
 /* L298
- * 
+ *
  * Description
  *   L298 Dual Full-Bridge Driver Control.
- * 
+ *
  *   L298 ()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   void
  */
@@ -26,18 +26,18 @@ L298::L298() {
 }
 
 /* attach
- * 
+ *
  * Description
  *   Attach pins.
- * 
+ *
  *   motor.attach(byte in1_pin, byte in2_pin, byte in3_pin, byte in4_pin)
- * 
+ *
  * Parameters
  *   byte in1_pin
  *   byte in2_pin
  *   byte in3_pin
  *   byte in4_pin
- * 
+ *
  * Returns
  *   void
  */
@@ -54,35 +54,35 @@ void L298::attach(byte in1_pin, byte in2_pin, byte in3_pin, byte in4_pin) {
 }
 
 /* update
- * 
+ *
  * Description
  *   Update driver Output.
- * 
+ *
  *   motor.update()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   void
  */
 void L298::update() {
-  digitalWrite(_in1_pin, _a1);
-  digitalWrite(_in2_pin, _a2);
-  digitalWrite(_in3_pin, _b1);
-  digitalWrite(_in4_pin, _b2);
+  analogWrite(_in1_pin, _a1);
+  analogWrite(_in2_pin, _a2);
+  analogWrite(_in3_pin, _b1);
+  analogWrite(_in4_pin, _b2);
 }
 
 /* stopA
- * 
+ *
  * Description
  *   Stop Output A.
- * 
+ *
  *   motor.stopA()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   void
  */
@@ -93,15 +93,15 @@ void L298::stopA() {
 }
 
 /* stopB
- * 
+ *
  * Description
  *   Stop Output B.
- * 
+ *
  *   motor.stopB()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   void
  */
@@ -112,15 +112,15 @@ void L298::stopB() {
 }
 
 /* directA
- * 
+ *
  * Description
  *   Start a Conventional electric current on Output A.
- * 
+ *
  *   motor.directA()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   void
  */
@@ -131,15 +131,15 @@ void L298::directA(byte delta) {
 }
 
 /* directB
- * 
+ *
  * Description
  *   Start a Conventional electric current on Output B.
- * 
+ *
  *   motor.directB()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   void
  */
@@ -150,15 +150,15 @@ void L298::directB(byte delta) {
 }
 
 /* reverseA
- * 
+ *
  * Description
  *   Start a Real electric current on Output A.
- * 
+ *
  *   motor.reverseA()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   void
  */
@@ -169,15 +169,15 @@ void L298::reverseA(byte delta) {
 }
 
 /* reverseB
- * 
+ *
  * Description
  *   Start a Real electric current on Output B.
- * 
+ *
  *   motor.reverseB()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   void
  */
@@ -188,15 +188,15 @@ void L298::reverseB(byte delta) {
 }
 
 /* speedA
- * 
+ *
  * Description
  *   Set motor A speed.
- * 
+ *
  *   motor.speedA()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   void
  */
@@ -210,15 +210,15 @@ void L298::setDeltaA(byte delta) {
 }
 
 /* speedB
- * 
+ *
  * Description
  *   Set motor B speed.
- * 
+ *
  *   motor.speedB()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   void
  */
@@ -232,15 +232,15 @@ void L298::setDeltaB(byte delta) {
 }
 
 /* getDirectionA
- * 
+ *
  * Description
  *   Get Output A electric current direction.
- * 
+ *
  *   motor.getDirectionA()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   true: Conventional electric current flow
  *   false: Real electric current flow
@@ -250,15 +250,15 @@ bool L298::getDirectionA() {
 }
 
 /* getDirectionB
- * 
+ *
  * Description
  *   Get Output B electric current direction.
- * 
+ *
  *   motor.getDirectionB()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   true: Conventional electric current flow
  *   false: Real electric current flow
@@ -268,15 +268,15 @@ bool L298::getDirectionB() {
 }
 
 /* getDeltaA
- * 
+ *
  * Description
  *   Get delta in Output A.
- * 
+ *
  *   motor.getDeltaA()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   byte
  */
@@ -285,15 +285,15 @@ byte L298::getDeltaA() {
 }
 
 /* getDeltaB
- * 
+ *
  * Description
  *   Get delta in Output B.
- * 
+ *
  *   motor.getDeltaB()
- * 
+ *
  * Parameters
  *   none
- * 
+ *
  * Returns
  *   byte
  */
@@ -302,16 +302,16 @@ byte L298::getDeltaB() {
 }
 
 /* delta
- * 
+ *
  * Description
  *   Calculate delta.
- * 
+ *
  *   delta()
- * 
+ *
  * Parameters
  *   x
  *   y
- * 
+ *
  * Returns
  *   byte
  */
@@ -325,16 +325,16 @@ byte delta(byte x, byte y) {
 }
 
 /* direction
- * 
+ *
  * Description
  *   Calculate direction.
- * 
+ *
  *   direction()
- * 
+ *
  * Parameters
  *   x
  *   y
- * 
+ *
  * Returns
  *   byte
  */

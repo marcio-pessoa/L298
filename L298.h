@@ -1,9 +1,12 @@
 /* L298.h - L298 Dual Full-Bridge Driver Control Library
- * 
+ *
  * Author: Márcio Pessoa <marcio.pessoa@gmail.com>
  * Contributors: none
- * 
+ *
  * Change log
+ * 2019-02-12
+ *         Fixed: Speed control was not working.
+ *
  * 2018-12-26
  *         Added: setDeltaA() and setDeltaB() methods.
  *
