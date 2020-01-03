@@ -1,5 +1,7 @@
 /* L298.cpp - L298 Dual Full-Bridge Driver Control Library
  *
+ * Copyright 2019-2020 Marcio Pessoa
+ *
  */
 
 #include "Arduino.h"
@@ -203,8 +205,7 @@ void L298::reverseB(byte delta) {
 void L298::setDeltaA(byte delta) {
   if (getDirectionA()) {
     directA(delta);
-  }
-  else {
+  } else {
     reverseA(delta);
   }
 }
@@ -225,8 +226,7 @@ void L298::setDeltaA(byte delta) {
 void L298::setDeltaB(byte delta) {
   if (getDirectionB()) {
     directB(delta);
-  }
-  else {
+  } else {
     reverseB(delta);
   }
 }
@@ -318,8 +318,7 @@ byte L298::getDeltaB() {
 byte delta(byte x, byte y) {
   if (x > y) {
     return x - y;
-  }
-  else {
+  } else {
     return y - x;
   }
 }
@@ -341,8 +340,7 @@ byte delta(byte x, byte y) {
 byte direction(byte x, byte y) {
   if (x > y) {
     return true;
-  }
-  else {
+  } else {
     return false;
   }
 }
